@@ -25,11 +25,16 @@ jobs:
         with:
           role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
           aws-region: ${{ env.AWS_REGION }}
-      - name: Deploy to AWS CloudFormation
+      - name: Deploy S3 to AWS CloudFormation
         uses: aws-actions/aws-cloudformation-github-deploy@v1
         with:
           name: create-s3-bucket
           template: s3.yaml
+      - name: Deploy EC2 to AWS CloudFormation
+        uses: aws-actions/aws-cloudformation-github-deploy@v1
+        with:
+          name: create-s3-bucket
+          template: ec2.yaml
 
 # https://github.com/aws-actions/aws-cloudformation-github-deploy
 # https://github.com/github/super-linter
