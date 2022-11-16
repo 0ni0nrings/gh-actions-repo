@@ -1,10 +1,21 @@
-on: [push, workflow_dispatch]
+name: Deploy S3 Bucket
+
+on:
+  workflow_dispatch:
+    inputs:
+      region:
+        description: 'AWS Region'
+        required: true
+        default: 'us-east-1'
+        
 jobs:
-  aws_cdk:
+  aws_s3:
     permissions:
       id-token: write
       contents: read
     runs-on: ubuntu-latest
+    outputs:
+      env-name: ${{ steps.env-name.outputs.environment }}
     steps:
       - name: Checkout repo
         uses: actions/checkout@v3
@@ -12,17 +23,16 @@ jobs:
         uses: github/super-linter@v3
         env:
           DEFAULT_BRANCH: main
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Configure AWS credentials from Test account
         uses: aws-actions/configure-aws-credentials@v1
         with:
           role-to-assume: arn:aws:iam::357171604946:role/gh-actions-role
-          aws-region: us-east-1
-      - name: Install dependencies
-        run: npm install -g aws-cdk
-      - name: Install required packages
-        run: pip install -r requirements.txt
-      - name: Synth stack
-        run: cdk synth
-      - name: Deploy stack
-        run: cdk deploy --all --require-approval never
+          aws-region: ${{ github.event.inputs.region}}
+      - name: Deploy to AWS CloudFormation
+        uses: aws-actions/aws-cloudformation-github-deploy@master
+        with:
+          name: create-s3-bucket
+          template: s3.yaml
+
+# https://github.com/aws-actions/aws-cloudformation-github-deploy
