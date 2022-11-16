@@ -19,7 +19,7 @@ jobs:
         env:
           VALIDATE_ALL_CODEBASE: false
           DEFAULT_BRANCH: main
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # no need to set the GitHub Secret as it is automatically set by GitHub.
       - name: Configure AWS credentials from Test account
         uses: aws-actions/configure-aws-credentials@v1
         with:
@@ -32,3 +32,4 @@ jobs:
           template: s3.yaml
 
 # https://github.com/aws-actions/aws-cloudformation-github-deploy
+# https://github.com/github/super-linter
