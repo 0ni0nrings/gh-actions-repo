@@ -23,7 +23,7 @@ jobs:
       - name: Configure AWS credentials from Test account
         uses: aws-actions/configure-aws-credentials@v1
         with:
-          role-to-assume: arn:aws:iam::357171604946:role/gh-actions-role
+          role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
           aws-region: ${{ env.AWS_REGION }}
       - name: Deploy to AWS CloudFormation
         uses: aws-actions/aws-cloudformation-github-deploy@v1
@@ -33,3 +33,4 @@ jobs:
 
 # https://github.com/aws-actions/aws-cloudformation-github-deploy
 # https://github.com/github/super-linter
+# https://github.com/aws-actions/configure-aws-credentials
