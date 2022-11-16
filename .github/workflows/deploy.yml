@@ -11,8 +11,6 @@ jobs:
       id-token: write
       contents: read
     runs-on: ubuntu-latest
-    outputs:
-      env-name: ${{ steps.env-name.outputs.environment }}
     steps:
       - name: Checkout repo
         uses: actions/checkout@v3
