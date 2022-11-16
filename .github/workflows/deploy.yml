@@ -27,7 +27,7 @@ jobs:
           role-to-assume: arn:aws:iam::357171604946:role/gh-actions-role
           aws-region: ${{ env.AWS_REGION }}
       - name: Deploy to AWS CloudFormation
-        uses: aws-actions/aws-cloudformation-github-deploy@master
+        uses: aws-actions/aws-cloudformation-github-deploy@v1
         with:
           name: create-s3-bucket
           template: s3.yaml
