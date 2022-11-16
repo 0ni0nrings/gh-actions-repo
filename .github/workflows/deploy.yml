@@ -1,4 +1,4 @@
-name: Deploy S3 Bucket
+name: Deploy Cloudformation Resources
 
 on: [push, workflow_dispatch]
 
@@ -33,7 +33,7 @@ jobs:
       - name: Deploy EC2 to AWS CloudFormation
         uses: aws-actions/aws-cloudformation-github-deploy@v1
         with:
-          name: create-s3-bucket
+          name: create-ec2-instance
           template: ec2.yaml
 
 # https://github.com/aws-actions/aws-cloudformation-github-deploy
