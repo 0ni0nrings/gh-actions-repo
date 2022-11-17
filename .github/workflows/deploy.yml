@@ -25,14 +25,36 @@ jobs:
         with:
           role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
           aws-region: ${{ env.AWS_REGION }}
-      - name: Deploy Reeources to AWS CloudFormation
+      - name: Deploy S3 to AWS CloudFormation
+        uses: aws-actions/aws-cloudformation-github-deploy@v1
+        with:
+          name: create-s3-bucket
+          template: s3.yaml
+  aws_ec2:
+    permissions:
+      id-token: write
+      contents: read
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+      - name: Lint Code Base
+        uses: github/super-linter/slim@v4
+        env:
+          VALIDATE_ALL_CODEBASE: false
+          DEFAULT_BRANCH: main
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # no need to set the GitHub Secret as it is automatically set by GitHub.
+      - name: Configure AWS credentials from Test account
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
+          aws-region: ${{ env.AWS_REGION }}
+      - name: Deploy EC2 to AWS CloudFormation
         uses: aws-actions/aws-cloudformation-github-deploy@v1
         with:
           name: create-ec2-instance
-        env:
-          SOURCE_DIR: './cloudformation'
+          template: ec2.yaml
 
-      
 # https://github.com/aws-actions/aws-cloudformation-github-deploy
 # https://github.com/github/super-linter
 # https://github.com/aws-actions/configure-aws-credentials
